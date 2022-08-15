@@ -1,0 +1,32 @@
+{% extends "layout/base.html" %}
+
+{% block head %}
+{{ super() }}
+<title>
+avble homepage
+</title>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="leftcolumn">
+        <!-- display post-->
+        {% for p in posts %}
+        <div class="card">
+            <h2>{{p['title']}}</h2> 
+            <div class="fakeimg" style="height:200px;">Image</div>
+            <p>
+            {{p['content']}}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- display right column-->
+    <div class="rightcolumn">
+        <div class="card">
+            <h2>About</h2>
+            <div class="fakeimg" style="height:100px;">Image</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

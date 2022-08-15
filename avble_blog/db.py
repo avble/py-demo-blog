@@ -83,5 +83,15 @@ def user_add(user, password):
     Add a username and password to database
     """
 
-# g_db['prod'] = False
+
+# post table manipulation
+def post_read():
+    db = db_get()
+    cur = db.cursor()
+    data = cur.execute('select * from posts')
+    rows = data.fetchmany(10)
+    return rows
+
+g_db['prod'] = False
 # db_init()
+# print(post_read())
