@@ -39,7 +39,8 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         """
         return page not foud
         """
-        self.send_msg(None, HTTPStatus.NOT_FOUND)
+        self.send_error(HTTPStatus.NOT_FOUND)
+        # self.send_msg(None, HTTPStatus.NOT_FOUND)
 
     def send_page_in_construction(self):
         """
@@ -61,7 +62,6 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
 
         self.send_msg(msg)
 
-
     # admin UI
     def admin_handler(self) -> str:
         # /admin?page=post
@@ -77,7 +77,6 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         else:
             return self.send_page_not_found()
 
-
     def admin_users(self) -> str:
         tpl = self.env_admin.get_template('users.html')
         users = []
@@ -87,6 +86,8 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         msg = tpl.render(users=users)
         self.send_msg(msg)
 
+    def admin_login(self):
+        pass
 
     def admin_posts(self) -> str:
         self.send_page_in_construction()
@@ -128,6 +129,8 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         elif action == 'admin':
             # admin page
             self.admin_handler()
+        else:
+            self.send_page_not_found()
 
     # handle a POST request
     def do_POST(sefl):
