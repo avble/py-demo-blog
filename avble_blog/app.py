@@ -1,7 +1,9 @@
 import http.server as http_srv
 from http import HTTPStatus
+from json import load
 import socketserver
 import re
+from urllib.parse import urlparse, parse_qs
 
 from jinja2 import Environment
 from jinja2.loaders import FileSystemLoader
@@ -17,11 +19,13 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
 
         # Front-end setup
         self.env = Environment(loader=FileSystemLoader('avble_blog/template'))
+        self.env_admin = Environment(loader=FileSystemLoader('avble_blog/template/admin'))
+
         super().__init__(*args, **kwargs)
 
     # Utility function
     def send_msg(self, msg_body:str = None, status_code:HTTPStatus = HTTPStatus.OK):
-        # send the message whose status is 200
+        # send the message
         # 
         self.send_response(status_code)
         if msg_body != None:
@@ -31,25 +35,17 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         if msg_body != None:
             self.wfile.write(msg_body.encode())
 
-    # webapp user
-    def app_index(self):
+    def send_page_not_found(self):
+        """
+        return page not foud
+        """
+        self.send_msg(None, HTTPStatus.NOT_FOUND)
+
+    # user UI
+    def user_handler(self):
         # /app
         #
         posts = []
-        # posts.append({
-        #     "title": "title 01",
-        #     "content": "This is the content of title 01."
-        # })
-
-        # posts.append({
-        #     "title": "title 02",
-        #     "content": "This is the content of title 02."
-        # })
-
-        # posts.append({
-        #     "title": "title 03",
-        #     "content": "This is the content of title 03."
-        # })
 
         rows = db.post_read()
         posts = [{'title': row[0], 'content': row[1]} for row in rows]
@@ -60,11 +56,36 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         self.send_msg(msg)
 
 
-    # webapp admin
-    def admin_index(self):
-        # /admin
-        pass
+    # admin UI
+    def admin_handler(self) -> str:
+        # /admin?page=post
+        # in case the page is ommited.
+        url_parser_ = urlparse(self.path)
+        dict_par = parse_qs(url_parser_.query)
 
+        page = dict_par.get('page', ['users'])[0]
+        if page == 'users':
+            return self.admin_users()
+        elif page == 'posts':
+            return self.admin_posts()
+        else:
+            return self.send_page_not_found()
+
+
+    def admin_users(self) -> str:
+        tpl = self.env_admin.get_template('users.html')
+        users = []
+        for id in range(1, 10):
+            users.append(('id-' + str(id), 'username_' + str(id)))
+
+        msg = tpl.render(users=users)
+        self.send_msg(msg)
+
+
+    def admin_posts(self) -> str:
+        pass
+    
+    # Api handler
     def get_posts_handle(self, post_id):
         """
         This endpoint is used to process an GET /post endpoind
@@ -95,9 +116,9 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         if action == 'posts':
             self.get_posts_handle(paths.groups()[1])
         elif action == 'app':
-            self.app_index()
+            self.user_handler()
         elif action == 'admin':
-            self.admin_index()
+            self.admin_handler()
 
     # handle a POST request
     def do_POST(sefl):

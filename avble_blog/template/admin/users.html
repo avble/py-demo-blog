@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- loop over the user-->
+
+<table>
+    <tr>
+        <th>ID </th>
+        <th>username</th>
+    </tr>
+{% for usr in users %}
+    <tr>
+        <td>
+        {{usr[0]}}
+        </td> 
+        <td>
+        {{usr[1]}}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

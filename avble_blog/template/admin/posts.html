@@ -1,0 +1,32 @@
+{# 
+Render the post content
+Example of keyword variable (posts)
+[
+{
+    'title': 'post 01',
+    'content': 'this is content for post 01'
+},
+{
+    'title': 'post 02',
+    'content': 'this is content for post 02'
+}
+]
+
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+<table>
+<tr>
+    <th> Title </th>
+    <th> Description </th>
+</tr>
+{% for post in posts %}
+<tr>
+    <td> {{post['title']}} </td>
+    <Td> {{post['content']}} </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
