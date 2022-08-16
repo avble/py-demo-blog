@@ -1,9 +1,11 @@
 import http.server as http_srv
-from http import HTTPStatus
+from http import HTTPStatus, cookies
 from json import load
 import socketserver
 import re
+import uuid
 from urllib.parse import urlparse, parse_qs
+
 
 from jinja2 import Environment
 from jinja2.loaders import FileSystemLoader
@@ -14,6 +16,8 @@ from . import db
 class BlogHandler(http_srv.BaseHTTPRequestHandler):
     
     server_version = "BlogHandler 1.0"
+
+    session = []
 
     def __init__(self, *args, **kwargs):
 
@@ -48,10 +52,52 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         """
         self.send_msg("Page is under construction")
 
+
+    def login_handler(self):
+        # GET: render the login form 
+        # POST form:
+        # self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+        # self.send_header('Location', '/app')
+        # session_id = str(uuid.uuid4())
+        # BlogHandler.session.append(session_id)
+
+        # # step 2: send cookie to the header
+        # self.send_header('set-cookie', f'session={session_id}')
+        # self.end_headers()
+
+        if self.command == 'GET':
+            tpl = self.env.get_template('login.html')
+            msg = tpl.render()
+            self.send_msg(msg)
+        elif self.command == 'POST':
+            # check authentication
+
+
+            # redirect to admin page
+            
+            pass
+
+
+
+
     # user UI
     def user_handler(self):
         # /app
         #
+        # get cookied
+        req_cookie = self.headers.get('cookie')
+        cookie_ =cookies.SimpleCookie()
+        cookie_.load(req_cookie)
+
+        if cookie_['session'].value not in BlogHandler.session:
+            # check if it is stored
+            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.send_header('Location', '/auth')
+            self.end_headers()
+            return
+
+
+        # if yes
         posts = []
 
         rows = db.post_read()
@@ -129,6 +175,9 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         elif action == 'admin':
             # admin page
             self.admin_handler()
+        elif action == 'login':
+            # login page
+            self.login_handler()
         else:
             self.send_page_not_found()
 
