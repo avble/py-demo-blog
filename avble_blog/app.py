@@ -41,6 +41,12 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         """
         self.send_msg(None, HTTPStatus.NOT_FOUND)
 
+    def send_page_in_construction(self):
+        """
+        return page in the construction
+        """
+        self.send_msg("Page is under construction")
+
     # user UI
     def user_handler(self):
         # /app
@@ -83,7 +89,7 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
 
 
     def admin_posts(self) -> str:
-        pass
+        self.send_page_in_construction()
     
     # Api handler
     def get_posts_handle(self, post_id):
@@ -114,10 +120,13 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         action = action.strip('/')
         print("DEBUG do_GET: ", action)
         if action == 'posts':
+            # Rest API
             self.get_posts_handle(paths.groups()[1])
         elif action == 'app':
+            # user app
             self.user_handler()
         elif action == 'admin':
+            # admin page
             self.admin_handler()
 
     # handle a POST request
