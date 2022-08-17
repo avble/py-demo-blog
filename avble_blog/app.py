@@ -4,11 +4,14 @@ from json import load
 import socketserver
 import re
 import uuid
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import unquote, urlparse, parse_qs
+from urllib import parse as url_parse
 
 
 from jinja2 import Environment
 from jinja2.loaders import FileSystemLoader
+
+import flask
 
 from . import db
 
@@ -16,7 +19,6 @@ from . import db
 class BlogHandler(http_srv.BaseHTTPRequestHandler):
     
     server_version = "BlogHandler 1.0"
-
     session = []
 
     def __init__(self, *args, **kwargs):
@@ -54,50 +56,48 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
 
 
     def login_handler(self):
+        # called by both POST and GET method
         # GET: render the login form 
         # POST form:
-        # self.send_response(HTTPStatus.PERMANENT_REDIRECT)
-        # self.send_header('Location', '/app')
-        # session_id = str(uuid.uuid4())
-        # BlogHandler.session.append(session_id)
 
-        # # step 2: send cookie to the header
-        # self.send_header('set-cookie', f'session={session_id}')
-        # self.end_headers()
 
         if self.command == 'GET':
+            print("Trace-login-GET")
             tpl = self.env.get_template('login.html')
             msg = tpl.render()
             self.send_msg(msg)
+            return
         elif self.command == 'POST':
-            # check authentication
+            print('TRACE-login-POST')
+            if self.headers.get_content_type() == 'application/x-www-form-urlencoded':
+                # read body
+                con_len = self.headers.get('Content-Length')
+                content = self.rfile.read(int(con_len))
+                # unquote
+                url_unquoted = url_parse.unquote(content.decode())
+                self.form = url_parse.parse_qs(url_unquoted)
 
+                # 
+                usr = self.form['username'][0]
+                # pass = self.form['password'][0]
+                if usr == 'admin':
+                    # Redirect to admin page
+                    self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+                    self.send_header('Location', '/admin')
+                    session_id = str(uuid.uuid4())
+                    BlogHandler.session.append(session_id)
 
-            # redirect to admin page
-            
-            pass
-
-
-
+                    # step 2: send cookie to the header
+                    self.send_header('set-cookie', f'session={session_id}')
+                    self.end_headers()
+                else: 
+                    tpl = self.env.get_template('login.html')
+                    msg = tpl.render()
+                    self.send_msg(msg)
 
     # user UI
     def user_handler(self):
         # /app
-        #
-        # get cookied
-        req_cookie = self.headers.get('cookie')
-        cookie_ =cookies.SimpleCookie()
-        cookie_.load(req_cookie)
-
-        if cookie_['session'].value not in BlogHandler.session:
-            # check if it is stored
-            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
-            self.send_header('Location', '/auth')
-            self.end_headers()
-            return
-
-
-        # if yes
         posts = []
 
         rows = db.post_read()
@@ -114,6 +114,24 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         # in case the page is ommited.
         url_parser_ = urlparse(self.path)
         dict_par = parse_qs(url_parser_.query)
+
+        req_cookie = self.headers.get('cookie', None)
+        if req_cookie == None:
+            # redirect 
+            # check if it is stored
+            # self.send
+            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.send_header('Location', '/login')
+            self.end_headers()
+
+        cookie_ =cookies.SimpleCookie()
+        cookie_.load(req_cookie)
+        if cookie_['session'].value not in BlogHandler.session:
+            # check if it is stored
+            self.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.send_header('Location', '/login')
+            self.end_headers()
+            return
 
         page = dict_par.get('page', ['users'])[0]
         if page == 'users':
@@ -151,39 +169,46 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         self.wfile.write(msg.encode())
 
     # handle a GET request
-    def do_GET(self):
+    def request_dispatch(self):
         """
-        GET entry point
         """
         # paths = re.match(r"(/posts/)(\d+)", self.path)
         paths = re.match(r"(^/\w+)(.*)", self.path)
 
+        print('trace: request_dispatch:', paths)
         if paths == None:
             # send invalid request
             self.send_response(HTTPStatus.BAD_REQUEST)
             self.end_headers()
+            return
         
         action = paths.groups()[0]
         action = action.strip('/')
-        print("DEBUG do_GET: ", action)
-        if action == 'posts':
+        if action == 'posts' and self.command == 'GET':
             # Rest API
             self.get_posts_handle(paths.groups()[1])
-        elif action == 'app':
+        elif action == 'app' and self.command == 'GET':
             # user app
             self.user_handler()
-        elif action == 'admin':
+        elif action == 'admin': # and self.command == 'GET':
             # admin page
             self.admin_handler()
         elif action == 'login':
+            # accept both GET and POST command
             # login page
             self.login_handler()
         else:
             self.send_page_not_found()
 
-    # handle a POST request
-    def do_POST(sefl):
+    def do_GET(self):
+        print("trace: do_GET")
+        self.request_dispatch()
         pass
+
+    # handle a POST request
+    def do_POST(self):
+        print("trace: do_POST")
+        self.request_dispatch()
 
 
 def run_forever(port = 8080):
