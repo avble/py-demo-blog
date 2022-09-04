@@ -11,8 +11,6 @@ from urllib import parse as url_parse
 from jinja2 import Environment
 from jinja2.loaders import FileSystemLoader
 
-import flask
-
 from . import db
 
 
@@ -59,7 +57,6 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         # called by both POST and GET method
         # GET: render the login form 
         # POST form:
-
 
         if self.command == 'GET':
             print("Trace-login-GET")

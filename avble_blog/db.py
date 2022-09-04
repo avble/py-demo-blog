@@ -1,13 +1,16 @@
-from genericpath import isfile
 import sqlite3
 import os.path
+from . import cfg
 
-DB_NAME = "blog.db"
 DB_SCHEMA = "schema.sql"
 DB_TEST_DATA = "test_data.sql"
 
 # Global variable for database
-g_db = {}
+g_db = cfg.g_cfg['db_cfg']
+DB_NAME = g_db['name']
+DB_SCHEMA = g_db['schema']
+DB_TEST_DATA = g_db['test_data']
+
 # conn: represent a connection to datbase
 # db: represent a database folder 
 # prod: represent if it is prod environment  
@@ -18,7 +21,7 @@ def db_get() -> sqlite3.Connection:
     + return an instance of db connection
     """
     if 'conn' not in g_db:
-        conn = sqlite3.connect(DB_NAME)
+        conn = sqlite3.connect(g_db['name'])
         if conn != None:
             g_db['conn'] = conn
         else:
