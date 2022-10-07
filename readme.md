@@ -1,23 +1,35 @@
 # Introduction
 To write a web application, there are various web framework out there. 
-They are included but not all, Django, Flask, etc. The Python itself also 
+They are included but not all, Django, Flask, FastAPI, etc. The Python itself also 
 provides a build-in library for developing web application, it is Internet
 Protocols and Support library.
 
-This writing intends to use the library provided by Python to demonstrate
-writing a restfull Api for blog web-application.
+Beside the obvious benefits of using the above web framework, there are also disadvantages.
+They are included but not all
++ These frameworks implement a bunch of the features that is trivial to the target 
+web-application. Consequently, their code-base is quite big that would cause difficulty
+in maintaining the application.
++ Each framework has their own limitation as well as its issues. Resolve these limitations and its issue
+requires a much time and highly skilled set.
 
-For rest api:
+This small project intends to use the library provided by Python to demonstrate
+writing a web-application from front-end to API back-end.
+
+## For Rest API:
 + Use python built-in library, Internet Protocols and Support library.
 
-For database:
+## For database:
 + The python has specified the database interface at PEP 249. Each instance
 database such as PostgresSQL, MySQL, sqlite3, etc have its own implementation.
 For this demonstration of blog web-application, the sqlite3 is selected.
 
-For Front-end:
+## For Front-end:
+### Template engineer
 + At the time of writing, python does not have the built-in library for template rendering.
 Fortunately, Jinja2 library is one candidate for redering the template.
+
+### others
+html, css, etc. 
 
 Talk is always cheaper than the actual works.
 
