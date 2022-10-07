@@ -6,7 +6,7 @@ Protocols and Support library.
 
 Beside the obvious benefits of using the above web framework, there are also disadvantages.
 They are included but not all
-+ These frameworks implement a bunch of the features that is trivial to the target 
++ These frameworks implement a bunch of the features and many of them are trivial to the target 
 web-application. Consequently, their code-base is quite big that would cause difficulty
 in maintaining the application.
 + Each framework has their own limitation as well as its issues. Resolve these limitations and its issue
