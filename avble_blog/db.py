@@ -2,9 +2,6 @@ import sqlite3
 import os.path
 from . import cfg
 
-DB_SCHEMA = "schema.sql"
-DB_TEST_DATA = "test_data.sql"
-
 # Global variable for database
 g_db = cfg.g_cfg['db_cfg']
 DB_NAME = g_db['name']

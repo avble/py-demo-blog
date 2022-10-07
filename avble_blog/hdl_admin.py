@@ -1,6 +1,7 @@
 from urllib.parse import unquote, urlparse, parse_qs
 from http import HTTPStatus, cookies
 
+from . import db
 
 class AdminUI:
     def __init__(self, app_blog):
@@ -49,8 +50,13 @@ class AdminUI:
         msg = tpl.render(users=users)
         self.app.send_msg(msg)
 
-    def admin_login(self):
-        pass
 
     def admin_posts(self) -> str:
-        self.app.send_page_in_construction()
+        tpl = self.app.env_admin.get_template('posts.html')
+        
+        posts = []
+        rows = db.post_read()
+        posts = [{'title': row[0], 'content': row[1]} for row in rows]
+
+        msg = tpl.render(posts=posts)
+        self.app.send_msg(msg)
