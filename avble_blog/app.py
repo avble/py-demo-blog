@@ -66,16 +66,19 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         
         action = paths.groups()[0]
         action = action.strip('/')
+        print("DEBUG: action - ", action)
         if action == 'api' and self.command == 'GET':
             # Rest API
             rest = hdl_rest.RestHandler(self)
             rest.hanlder(paths.groups()[1])
         elif action == 'app' and self.command == 'GET':
             # user app
+            print("DEUBG: app")
             blg_app = hdl_blog.BlogApp(self)
             blg_app.handler()
         elif action == 'admin': # and self.command == 'GET':
             # admin page
+            print("DEUBG: admin")
             adm = hdl_admin.AdminUI(self)
             adm.handler()
             # self.admin_handler()

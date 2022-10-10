@@ -5,6 +5,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE posts(
+	id INTEGER PRIMARY KEY,
 	title TEXT NOT NULL,
-	content TEXT NOT NULL
+	content TEXT NOT NULL,
+	created_date TEXT NOT NULL
 );

@@ -85,11 +85,13 @@ def user_add(user, password):
 
 
 # post table manipulation
-def post_read():
+def post_read(num_row:int = 10, limit_low = 0)->list:
     db = db_get()
     cur = db.cursor()
-    data = cur.execute('select * from posts')
-    rows = data.fetchmany(10)
+    msg_query = f'select * from posts LIMIT {limit_low}, 10'
+    print(f'DEBUG {msg_query}')
+    data = cur.execute(msg_query)
+    rows = data.fetchmany(num_row)
     return rows
 
 g_db['prod'] = False
