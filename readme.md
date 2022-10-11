@@ -21,7 +21,7 @@ writing a web-application from front-end to API back-end.
 ## For database:
 + The python has specified the database interface at PEP 249. Each instance
 database such as PostgresSQL, MySQL, sqlite3, etc have its own implementation.
-For this demonstration of blog web-application, the sqlite3 is selected.
+For this demonstration of *blog* web-application, the sqlite3 is selected.
 
 ## For Front-end:
 ### Template engineer
