@@ -1,22 +1,29 @@
 {# 
+## Support search feature
+
 Render the post content
-Example of keyword variable (posts)
+# posts keyword argument
 [
 {
     'title': 'post 01',
     'content': 'this is content for post 01'
 },
-{
-    'title': 'post 02',
-    'content': 'this is content for post 02'
-}
 ]
+
+# pagination keyword argument
 
 #}
 
 {% extends "base.html" %}
 
 {% block content %}
+
+ <!-- The form -->
+ <form class="example" action="/admin" style="margin:left;max-width:300px">
+    <input type="text" placeholder="Search.." name="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+
 <table>
 <tr>
     <th> Title </th>
@@ -40,6 +47,5 @@ Example of keyword variable (posts)
     <a href="admin?page=post&&pagination={{pagination['cur_num']}}">{{pagination['cur_num']}}</a>
     <a href="admin?page=post&&pagination={{pagination['cur_num'] + 1}}">&raquo;</a>
 </div>
-
 
 {% endblock %}

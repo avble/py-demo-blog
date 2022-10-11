@@ -39,9 +39,15 @@ class AdminUI:
         if page == 'user':
             return self.admin_users()
         elif page == 'post':
+            # check if search
+            search_txt = dict_par.get('search', [""])[0]
+            if search_txt != "":
+                return self.post_search(search_txt)
+            else:
             # Pagination
-            pagination = dict_par.get('pagination', [0])[0]
-            return self.admin_posts(pagination=int(pagination))
+                pagination = dict_par.get('pagination', [0])[0]
+
+                return self.post_read(pagination=int(pagination))
         else:
             return self.app.send_page_not_found()
 
@@ -55,7 +61,7 @@ class AdminUI:
         self.app.send_msg(msg)
 
 
-    def admin_posts(self, pagination:int = 0) -> str:
+    def post_read(self, pagination:int = 0) -> str:
         '''
 
         '''
@@ -67,11 +73,20 @@ class AdminUI:
         posts = [{'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]} for row in rows]
 
         pag = {}
-        pag['pre_url'] = 'pre_url'
-        pag['cur_url'] = 'cur_url'
-        pag['next_url'] = 'next_url'
         pag['cur_num'] = pagination
 
         msg = tpl.render(posts=posts, pagination=pag)
         self.app.send_msg(msg)
 
+    def post_search(self, text:str):
+        '''
+        '''
+        tpl = self.app.env_admin.get_template('posts.html')
+        rows = db.post_search(text)
+        posts = [{'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]} for row in rows]
+
+        pag = {}
+        pag['cur_num'] = 0
+
+        msg = tpl.render(posts=posts, pagination=pag)
+        self.app.send_msg(msg)

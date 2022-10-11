@@ -94,6 +94,16 @@ def post_read(num_row:int = 10, limit_low = 0)->list:
     rows = data.fetchmany(num_row)
     return rows
 
+
+def post_search(txt:str):
+    db = db_get()
+    cur = db.cursor()
+    msg_query = "select * from posts where posts.content LIKE '%{txt}%'".format(txt=txt)
+    print(f'DEBUG {msg_query}')
+    data = cur.execute(msg_query)
+    rows = data.fetchmany(100)
+    return rows
+
 g_db['prod'] = False
 # db_init()
 # print(post_read())
