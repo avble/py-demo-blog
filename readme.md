@@ -13,7 +13,7 @@ in maintaining the application.
 requires a much time and highly skilled set.
 
 This small project intends to use the library provided by Python to demonstrate
-writing a web-application from front-end to API back-end.
+writing a BLOG web-application from front-end to API back-end.
 
 ## For Rest API:
 + Use python built-in library, Internet Protocols and Support library.
