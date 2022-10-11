@@ -11,7 +11,9 @@ Render the post content
 ]
 
 # pagination keyword argument
-
+{
+    'cur_num': 1
+}
 #}
 
 {% extends "base.html" %}
@@ -19,8 +21,10 @@ Render the post content
 {% block content %}
 
  <!-- The form -->
- <form class="example" action="/admin" style="margin:left;max-width:300px">
-    <input type="text" placeholder="Search.." name="search">
+ <form class="example" action="/admin" style="margin:left;max-width:300px" method="GET">
+    <input type="text" placeholder="Search.." name="search" />
+    <input type="hidden" id="page" name="page" value="posts" />
+    <input type="hidden" id="action" name="action" value="search" />
     <button type="submit"><i class="fa fa-search"></i></button>
 </form>
 
@@ -36,16 +40,16 @@ Render the post content
     <td> {{post['title']}} </td>
     <td> {{post['content']}} </td>
     <td> {{post['created_date']}}</td>
-    <td> [create] [edit] [del] </td>
+    <td> <a href="/admin?page=post&&id={{post['id']}}">[edit]</a>  [del] </td>
 </tr>
 {% endfor %}
 </table>
 
 <!-- Pagination -->
 <div class="pagination">
-    <a href="admin?page=post&&pagination={{pagination['cur_num'] - 1}}">&laquo;</a>
-    <a href="admin?page=post&&pagination={{pagination['cur_num']}}">{{pagination['cur_num']}}</a>
-    <a href="admin?page=post&&pagination={{pagination['cur_num'] + 1}}">&raquo;</a>
+    <a href="admin?page=posts&&pagination={{pagination['cur_num'] - 1}}">&laquo;</a>
+    <a href="admin?page=posts&&pagination={{pagination['cur_num']}}">{{pagination['cur_num']}}</a>
+    <a href="admin?page=posts&&pagination={{pagination['cur_num'] + 1}}">&raquo;</a>
 </div>
 
 {% endblock %}

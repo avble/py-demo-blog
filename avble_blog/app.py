@@ -4,6 +4,7 @@ from json import load
 import socketserver
 import re
 from urllib.parse import unquote, urlparse, parse_qs
+from urllib import parse as url_parse
 
 
 from jinja2 import Environment
@@ -57,13 +58,27 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         # paths = re.match(r"(/posts/)(\d+)", self.path)
         paths = re.match(r"(^/\w+)(.*)", self.path)
 
-        print('trace: request_dispatch:', paths)
+        print('trace: headers:', self.headers)
+        print('trace: path:', self.path)
         if paths == None:
             # send invalid request
             self.send_response(HTTPStatus.BAD_REQUEST)
             self.end_headers()
             return
         
+        # parsing form if any
+        if self.command == 'POST':
+            print(f'TRACE-login-POST header/content-type: {self.headers.get_content_type()} \n')
+            if self.headers.get_content_type() == 'application/x-www-form-urlencoded':
+                # read body
+                con_len = self.headers.get('Content-Length')
+                content = self.rfile.read(int(con_len))
+                # unquote
+                url_unquoted = url_parse.unquote(content.decode())
+                self.form = url_parse.parse_qs(url_unquoted)
+
+                print(f'[DEBUG] form data: {self.form}')
+
         action = paths.groups()[0]
         action = action.strip('/')
         if action == 'api' and self.command == 'GET':

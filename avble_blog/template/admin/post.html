@@ -1,0 +1,27 @@
+{# 
+## Support search feature
+
+Render the post content
+# posts keyword argument
+{
+    'id': 01
+    'title': 'post 01',
+    'content': 'this is content for post 01'
+}
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+ <!-- The form -->
+ <form class="example" action="/admin?page=post" method="POST" >
+    <input type="text" name="id" value="{{post['id']}}" />
+    <input type="text" name="title" value="{{post['title']}}" />
+    <input type="text" name="content" value="{{post['content']}}" />
+    <button type="submit">Submit</button>
+</form>
+
+
+
+{% endblock %}

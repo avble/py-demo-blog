@@ -21,7 +21,7 @@ class AdminUI:
             # redirect 
             # check if it is stored
             # self.send
-            self.app.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.app.send_response(HTTPStatus.TEMPORARY_REDIRECT)
             self.app.send_header('Location', '/login')
             self.app.end_headers()
 
@@ -35,19 +35,35 @@ class AdminUI:
             self.app.end_headers()
             return
 
-        page = dict_par.get('page', ['post'])[0]
+        page = dict_par.get('page', ['posts'])[0]
         if page == 'user':
             return self.admin_users()
-        elif page == 'post':
+        elif page == 'posts':
             # check if search
-            search_txt = dict_par.get('search', [""])[0]
-            if search_txt != "":
-                return self.post_search(search_txt)
+            action = dict_par.get('action', [""])[0]
+            if action == "search":
+                # Reading (Searching)
+                search_txt = dict_par.get('search', [""])[0]
+                return self.posts_search(search_txt)
             else:
-            # Pagination
+                # Reading (all with pagination)
                 pagination = dict_par.get('pagination', [0])[0]
+                return self.posts_read(pagination=int(pagination))
+        elif page == 'post':
+            if self.app.command == "POST":
+                # post request
+                id = self.app.form.get('id', [-1])[0]
+                title = self.app.form.get('title', ['title-default'])[0]
+                content = self.app.form.get('content', ['content-default'])[0]
+                # title = self.app.form['title']
 
-                return self.post_read(pagination=int(pagination))
+                self.post_update(id, title, content)
+                pass
+            else:
+                # get request
+                id = dict_par.get('id', [0])[0]
+                self.post_read(id)
+                pass
         else:
             return self.app.send_page_not_found()
 
@@ -60,16 +76,35 @@ class AdminUI:
         msg = tpl.render(users=users)
         self.app.send_msg(msg)
 
-
-    def post_read(self, pagination:int = 0) -> str:
+    def post_read(self, id:int)->str:
         '''
+        '''
+        tpl = self.app.env_admin.get_template('post.html')
+        
+        row = db.post_read(id)
+        post = None
+        if row != None:
+            # len(row)
+            post = {'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]}
 
+        msg = tpl.render(post=post)
+        self.app.send_msg(msg)
+
+    def post_update(self, id:int, title:str, content:str):
+        # Redirection to posts_read
+        db.post_update(id, title, content)
+
+        # Render page again
+        self.post_read(id)
+
+    def posts_read(self, pagination:int = 0) -> str:
+        '''
         '''
         tpl = self.app.env_admin.get_template('posts.html')
         
         posts = []
         limit_low = pagination*10
-        rows = db.post_read(limit_low=limit_low)
+        rows = db.posts_read(limit_low=limit_low)
         posts = [{'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]} for row in rows]
 
         pag = {}
@@ -78,11 +113,11 @@ class AdminUI:
         msg = tpl.render(posts=posts, pagination=pag)
         self.app.send_msg(msg)
 
-    def post_search(self, text:str):
+    def posts_search(self, text:str):
         '''
         '''
         tpl = self.app.env_admin.get_template('posts.html')
-        rows = db.post_search(text)
+        rows = db.posts_search(text)
         posts = [{'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]} for row in rows]
 
         pag = {}

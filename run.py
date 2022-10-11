@@ -5,4 +5,4 @@ import avble_blog.app as avb_app
 
 sys.path.append(dirname(__file__) + '/avble_blog')
 
-avb_app.run_forever(8081)
+avb_app.run_forever(8091)

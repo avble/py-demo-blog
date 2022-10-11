@@ -24,11 +24,11 @@ class LoginHandler():
             print('TRACE-login-POST')
             if self.app.headers.get_content_type() == 'application/x-www-form-urlencoded':
                 # read body
-                con_len = self.app.headers.get('Content-Length')
-                content = self.app.rfile.read(int(con_len))
-                # unquote
-                url_unquoted = url_parse.unquote(content.decode())
-                self.app.form = url_parse.parse_qs(url_unquoted)
+                # con_len = self.app.headers.get('Content-Length')
+                # content = self.app.rfile.read(int(con_len))
+                # # unquote
+                # url_unquoted = url_parse.unquote(content.decode())
+                # self.app.form = url_parse.parse_qs(url_unquoted)
 
                 # 
                 usr = self.app.form['username'][0]

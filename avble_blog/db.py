@@ -83,9 +83,27 @@ def user_add(user, password):
     Add a username and password to database
     """
 
+# post table manipulation
+def post_read(id:int = 0)->list:
+    db = db_get()
+    cur = db.cursor()
+    msg_query = f'select * from posts where id = {id}'
+    print(f'DEBUG {msg_query}')
+    data = cur.execute(msg_query)
+    row = data.fetchone()
+    return row
+
+
+# post update
+def post_update(id:int, title:str, content:str):
+    db = db_get()
+    cur = db.cursor()
+    msg_query = f'update posts set title = "{title}", content = "{content}" where id = {id}'
+    print(f'DEBUG {msg_query}')
+    cur.execute(msg_query)
 
 # post table manipulation
-def post_read(num_row:int = 10, limit_low = 0)->list:
+def posts_read(num_row:int = 10, limit_low = 0)->list:
     db = db_get()
     cur = db.cursor()
     msg_query = f'select * from posts LIMIT {limit_low}, 10'
@@ -95,7 +113,7 @@ def post_read(num_row:int = 10, limit_low = 0)->list:
     return rows
 
 
-def post_search(txt:str):
+def posts_search(txt:str):
     db = db_get()
     cur = db.cursor()
     msg_query = "select * from posts where posts.content LIKE '%{txt}%'".format(txt=txt)
@@ -106,4 +124,4 @@ def post_search(txt:str):
 
 g_db['prod'] = False
 # db_init()
-# print(post_read())
+# print(posts_read())
