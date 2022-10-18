@@ -9,7 +9,7 @@ They are included but not all
 + These frameworks implement a bunch of the features and many of them are trivial to the target 
 web-application. Consequently, their code-base is quite big that would cause difficulty
 in maintaining the application.
-+ Each framework has their own limitation as well as its issues. Resolve these limitations and its issue
++ Each framework has their own limitation, own design, own data structure as well as its issues. Resolve these limitations and its issue
 requires a much time and highly skilled set.
 
 This small project intends to use the library provided by Python to demonstrate
