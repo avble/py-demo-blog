@@ -37,27 +37,21 @@ Talk is always cheaper than the actual works.
 ## Rest API
 Handle getting a post
 ``` python
-def get_posts_handle(self, post_id):
-    """
-    This endpoint is used to process an GET /post endpoind
-    """
-    msg = "content of : " + post_id
-    self.send_response(200)
-    self.send_header("Content-Length", len(msg.encode()))
-    self.end_headers()
+    def handler(self):
+        # /app
+        posts = []
 
-    self.wfile.write(msg.encode())
+        rows = db.post_read()
+        posts = [{'title': row[0], 'content': row[1]} for row in rows]
+
+        tpl = self.app.env.get_template('index.html')
+        msg = tpl.render(posts=posts)
+
+        self.app.send_msg(msg)
 ```
-
-Create a new post
-``` python
-# TBU 
-
-```
-
 
 ## database
-1. Initializatino
+1. Initialization
 Create a database if it is not created.
 In case it is development environment, add test data
 ``` python
