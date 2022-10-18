@@ -35,7 +35,7 @@ Talk is always cheaper than the actual works.
 
 # Implementaion
 ## Rest API
-Handle getting a post
+Handle getting a post (code snippet)
 ``` python
     def handler(self):
         # /app
@@ -53,7 +53,7 @@ Handle getting a post
 ## database
 1. Initialization
 Create a database if it is not created.
-In case it is development environment, add test data
+In case it is development environment, add test data (code snippet)
 ``` python
 def db_init():
     """
