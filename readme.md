@@ -9,11 +9,11 @@ They are included but not all
 + These frameworks implement a bunch of the features and many of them are trivial to the target 
 web-application. Consequently, their code-base is quite big that would cause difficulty
 in maintaining the application.
-+ Each framework has their own limitation as well as its issues. Resolve these limitations and its issue
++ Each framework has their own limitation, own design, own data structure as well as its issues. Resolve these limitations and its issue
 requires a much time and highly skilled set.
 
 This small project intends to use the library provided by Python to demonstrate
-writing a web-application from front-end to API back-end.
+writing a BLOG web-application from front-end to API back-end.
 
 ## For Rest API:
 + Use python built-in library, Internet Protocols and Support library.
@@ -21,7 +21,7 @@ writing a web-application from front-end to API back-end.
 ## For database:
 + The python has specified the database interface at PEP 249. Each instance
 database such as PostgresSQL, MySQL, sqlite3, etc have its own implementation.
-For this demonstration of blog web-application, the sqlite3 is selected.
+For this demonstration of *blog* web-application, the sqlite3 is selected.
 
 ## For Front-end:
 ### Template engineer
@@ -35,31 +35,25 @@ Talk is always cheaper than the actual works.
 
 # Implementaion
 ## Rest API
-Handle getting a post
+Handle getting a post (code snippet)
 ``` python
-def get_posts_handle(self, post_id):
-    """
-    This endpoint is used to process an GET /post endpoind
-    """
-    msg = "content of : " + post_id
-    self.send_response(200)
-    self.send_header("Content-Length", len(msg.encode()))
-    self.end_headers()
+    def handler(self):
+        # /app
+        posts = []
 
-    self.wfile.write(msg.encode())
+        rows = db.post_read()
+        posts = [{'title': row[0], 'content': row[1]} for row in rows]
+
+        tpl = self.app.env.get_template('index.html')
+        msg = tpl.render(posts=posts)
+
+        self.app.send_msg(msg)
 ```
-
-Create a new post
-``` python
-# TBU 
-
-```
-
 
 ## database
-1. Initializatino
+1. Initialization
 Create a database if it is not created.
-In case it is development environment, add test data
+In case it is development environment, add test data (code snippet)
 ``` python
 def db_init():
     """
