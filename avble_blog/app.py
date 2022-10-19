@@ -68,7 +68,7 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         
         # parsing form if any
         if self.command == 'POST':
-            print(f'TRACE-login-POST header/content-type: {self.headers.get_content_type()} \n')
+            # print(f'TRACE-login-POST header/content-type: {self.headers.get_content_type()} \n')
             if self.headers.get_content_type() == 'application/x-www-form-urlencoded':
                 # read body
                 con_len = self.headers.get('Content-Length')
@@ -77,7 +77,7 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
                 url_unquoted = url_parse.unquote(content.decode())
                 self.form = url_parse.parse_qs(url_unquoted)
 
-                print(f'[DEBUG] form data: {self.form}')
+                # print(f'[DEBUG] form data: {self.form}')
 
         action = paths.groups()[0]
         action = action.strip('/')

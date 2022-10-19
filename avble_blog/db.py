@@ -88,7 +88,7 @@ def post_read(id:int = 0)->list:
     db = db_get()
     cur = db.cursor()
     msg_query = f'select * from posts where id = {id}'
-    print(f'DEBUG {msg_query}')
+    # print(f'DEBUG {msg_query}')
     data = cur.execute(msg_query)
     row = data.fetchone()
     return row
@@ -99,7 +99,7 @@ def post_update(id:int, title:str, content:str):
     db = db_get()
     cur = db.cursor()
     msg_query = f'update posts set title = "{title}", content = "{content}" where id = {id}'
-    print(f'DEBUG {msg_query}')
+    # print(f'DEBUG {msg_query}')
     cur.execute(msg_query)
 
 # post table manipulation
@@ -107,7 +107,7 @@ def posts_read(num_row:int = 10, limit_low = 0)->list:
     db = db_get()
     cur = db.cursor()
     msg_query = f'select * from posts LIMIT {limit_low}, 10'
-    print(f'DEBUG {msg_query}')
+    # print(f'DEBUG {msg_query}')
     data = cur.execute(msg_query)
     rows = data.fetchmany(num_row)
     return rows
@@ -117,7 +117,7 @@ def posts_search(txt:str):
     db = db_get()
     cur = db.cursor()
     msg_query = "select * from posts where posts.content LIKE '%{txt}%'".format(txt=txt)
-    print(f'DEBUG {msg_query}')
+    # print(f'DEBUG {msg_query}')
     data = cur.execute(msg_query)
     rows = data.fetchmany(100)
     return rows
