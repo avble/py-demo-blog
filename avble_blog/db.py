@@ -101,6 +101,7 @@ def post_update(id:int, title:str, content:str):
     msg_query = f'update posts set title = "{title}", content = "{content}" where id = {id}'
     # print(f'DEBUG {msg_query}')
     cur.execute(msg_query)
+    db.commit()
 
 # post table manipulation
 def posts_read(num_row:int = 10, limit_low = 0)->list:
