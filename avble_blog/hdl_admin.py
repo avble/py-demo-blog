@@ -45,25 +45,25 @@ class AdminUI:
                 # Reading (Searching)
                 search_txt = dict_par.get('search', [""])[0]
                 return self.posts_search(search_txt)
+            elif action == "delete":
+                id = dict_par.get('id', [-1])[0]
+                return self.posts_delete(id)
+            elif action == "read_a_post":
+                id = dict_par.get('id', [-1])[0]
+                self.post_read(id)
             else:
                 # Reading (all with pagination)
                 pagination = dict_par.get('pagination', [0])[0]
                 return self.posts_read(pagination=int(pagination))
         elif page == 'post':
             if self.app.command == "POST":
-                # post request
+                # update post
                 id = self.app.form.get('id', [-1])[0]
                 title = self.app.form.get('title', ['title-default'])[0]
                 content = self.app.form.get('content', ['content-default'])[0]
                 # title = self.app.form['title']
 
                 self.post_update(id, title, content)
-                pass
-            else:
-                # get request
-                id = dict_par.get('id', [0])[0]
-                self.post_read(id)
-                pass
         else:
             return self.app.send_page_not_found()
 
@@ -125,3 +125,9 @@ class AdminUI:
 
         msg = tpl.render(posts=posts, pagination=pag)
         self.app.send_msg(msg)
+
+    def posts_delete(self, id:int):
+        '''
+        '''
+        db.posts_delete(id)
+        self.posts_read()

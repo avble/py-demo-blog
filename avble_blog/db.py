@@ -103,6 +103,14 @@ def post_update(id:int, title:str, content:str):
     cur.execute(msg_query)
     db.commit()
 
+# post delete
+def posts_delete(id:int):
+    db = db_get()
+    cur = db.cursor()
+    msg_query = f'delete from posts where id = {id}'
+    cur.execute(msg_query)
+    db.commit()
+
 # post table manipulation
 def posts_read(num_row:int = 10, limit_low = 0)->list:
     db = db_get()
@@ -112,7 +120,6 @@ def posts_read(num_row:int = 10, limit_low = 0)->list:
     data = cur.execute(msg_query)
     rows = data.fetchmany(num_row)
     return rows
-
 
 def posts_search(txt:str):
     db = db_get()

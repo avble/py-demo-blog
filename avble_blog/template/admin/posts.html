@@ -40,14 +40,19 @@ Render the post content
     <td> {{post['title']}} </td>
     <td> {{post['content']}} </td>
     <td> {{post['created_date']}}</td>
-    <td> <a href="/admin?page=post&&id={{post['id']}}">[edit]</a>  [del] </td>
+    <td> <a href="/admin?page=posts&&action=read_a_post&&id={{post['id']}}">[edit]</a> 
+         <a href="/admin?page=posts&&action=delete&&id={{post['id']}}">[del]</a>  </td>
 </tr>
 {% endfor %}
 </table>
 
 <!-- Pagination -->
 <div class="pagination">
+    {% if pagination['cur_num'] >= 1 %}
     <a href="admin?page=posts&&pagination={{pagination['cur_num'] - 1}}">&laquo;</a>
+    {% else %}
+    <a >&laquo;</a>
+    {% endif %}
     <a href="admin?page=posts&&pagination={{pagination['cur_num']}}">{{pagination['cur_num']}}</a>
     <a href="admin?page=posts&&pagination={{pagination['cur_num'] + 1}}">&raquo;</a>
 </div>
