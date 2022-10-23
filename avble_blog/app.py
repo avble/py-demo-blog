@@ -58,8 +58,8 @@ class BlogHandler(http_srv.BaseHTTPRequestHandler):
         # paths = re.match(r"(/posts/)(\d+)", self.path)
         paths = re.match(r"(^/\w+)(.*)", self.path)
 
-        print('trace: headers:', self.headers)
-        print('trace: path:', self.path)
+        # print('trace: headers:', self.headers)
+        # print('trace: path:', self.path)
         if paths == None:
             # send invalid request
             self.send_response(HTTPStatus.BAD_REQUEST)

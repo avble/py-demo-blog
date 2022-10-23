@@ -30,7 +30,7 @@ class AdminUI:
 
         if self.app.sess.is_existed(cookie_['session'].value) is False:
             # check if it is stored
-            self.app.send_response(HTTPStatus.PERMANENT_REDIRECT)
+            self.app.send_response(HTTPStatus.TEMPORARY_REDIRECT)
             self.app.send_header('Location', '/login')
             self.app.end_headers()
             return

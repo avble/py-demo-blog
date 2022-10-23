@@ -51,24 +51,7 @@ Handle getting a post (code snippet)
 ```
 
 ## database
-1. Initialization
-Create a database if it is not created.
-In case it is development environment, add test data (code snippet)
-``` python
-def db_init():
-    """
-    Create a database if it does not exists
-    """
-    # If the db has not there, create the database
-    if not os.path.isfile(DB_NAME):
-        print ("Create database ")
-        db_execute_schema()
 
-    # check if it is the prod or dev environment
-    if 'prod' in g_db:
-        if g_db['prod'] == False:
-            db_add_test_data()
-```
 
 ## Front end app
 ```python

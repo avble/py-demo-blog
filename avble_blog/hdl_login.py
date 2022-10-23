@@ -34,7 +34,7 @@ class LoginHandler():
                 usr = self.app.form['username'][0]
                 if usr == 'admin':
                     # Redirect to admin page
-                    self.app.send_response(HTTPStatus.PERMANENT_REDIRECT)
+                    self.app.send_response(HTTPStatus.TEMPORARY_REDIRECT)
                     self.app.send_header('Location', '/admin')
                     session_id = str(uuid.uuid4())
                     self.app.sess.add(session_id)
