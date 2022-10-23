@@ -12,7 +12,7 @@ in maintaining the application.
 + Each framework has their own limitation, own design, own data structure as well as its issues. Resolve these limitations and its issue
 requires a much time and highly skilled set.
 
-This small project intends to use the library provided by Python to demonstrate
+This small (personal) project intends to use the library provided by Python to demonstrate
 writing a BLOG web-application from front-end to API back-end.
 
 ## For Rest API:
