@@ -18,10 +18,11 @@ Render the post content
  <form class="example" action="/admin?page=post" method="POST" >
     <input type="text" name="id" value="{{post['id']}}" />
     <input type="text" name="title" value="{{post['title']}}" />
-    <input type="text" name="content" value="{{post['content']}}" />
+    <input type="text" name="title_long" value="{{post['title_long']}}" />
+    <br/>
+    <textarea rows="10" cols="100" name="content" >{{post['content']}}</textarea>
+    <br/>
     <button type="submit">Submit</button>
 </form>
-
-
 
 {% endblock %}

@@ -85,7 +85,7 @@ class AdminUI:
         post = None
         if row != None:
             # len(row)
-            post = {'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]}
+            post = {'id': row[0], 'title': row[1], 'title_long': row[2], 'content': row[3], 'created_date': row[4]}
 
         msg = tpl.render(post=post)
         self.app.send_msg(msg)
@@ -105,7 +105,7 @@ class AdminUI:
         posts = []
         limit_low = pagination*10
         rows = db.posts_read(limit_low=limit_low)
-        posts = [{'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]} for row in rows]
+        posts = [{'id': row[0], 'title': row[1], 'title_long': row[2], 'created_date': row[4]} for row in rows]
 
         pag = {}
         pag['cur_num'] = pagination
@@ -118,7 +118,7 @@ class AdminUI:
         '''
         tpl = self.app.env_admin.get_template('posts.html')
         rows = db.posts_search(text)
-        posts = [{'id': row[0], 'title': row[1], 'content': row[2], 'created_date': row[3]} for row in rows]
+        posts = [{'id': row[0], 'title': row[1], 'title_long': row[2], 'created_date': row[3]} for row in rows]
 
         pag = {}
         pag['cur_num'] = 0

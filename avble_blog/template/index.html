@@ -14,9 +14,9 @@ avble homepage
         {% for p in posts %}
         <div class="card">
             <h2>{{p['title']}}</h2> 
-            <div class="fakeimg" style="height:200px;">Image</div>
+            <!-- <div class="fakeimg" style="height:100px;">Image</div> -->
             <p>
-            {{p['content']}}
+            {{ p['title_long'] | truncate(200) }}
             </p>
         </div>
         {% endfor %}

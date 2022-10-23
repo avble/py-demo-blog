@@ -30,6 +30,7 @@ create table users(
 create table posts(
 	id serial,
 	title text,
+	title_long text,
 	content text,
 	created_date timestamp
 );
